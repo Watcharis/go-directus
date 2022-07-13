@@ -5,9 +5,10 @@
 # install directus
     docker-compose up -d
 
-# precent graceful shutdown in Go
+# Present graceful shutdown in Go
 
-```func GraceFullShutdownAndRunServer() {
+```
+func GraceFullShutdownAndRunServer() {
 	var wg sync.WaitGroup
 
 	logger, _ := zap.NewProduction()
