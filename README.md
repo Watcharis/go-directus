@@ -3,7 +3,6 @@
     2. go run main.go
 
 ## install directus
-    use docker-compose cli
-
-    ```docker-compose up -d```
+```docker-compose up -d
+```
 
