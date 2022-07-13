@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -29,7 +28,7 @@ func GraceFullShutdownAndRunServer() {
 
 	handler, err := setupServer(sugarLogger)
 	if err != nil {
-		log.Printf("[ Error setUpServer ] => %+v", err.Error())
+		sugarLogger.Infof("[ Error setUpServer ] => %+v\n", err)
 	}
 
 	srv := &http.Server{

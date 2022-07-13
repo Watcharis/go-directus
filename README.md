@@ -1,6 +1,14 @@
-# install project
-    1. go mod download
-    2. go run main.go
+# install project & run project
+
+    1. clone project
+        * https://github.com/Watcharis/go-directus.git
+
+    2. install package go
+        * go mod download
+        * go mod tidy
+
+    3. run project use command
+        * go run main.go
 
 # install directus
     docker-compose up -d
@@ -17,7 +25,7 @@ func GraceFullShutdownAndRunServer() {
 
 	handler, err := setupServer(sugarLogger)
 	if err != nil {
-		log.Printf("[ Error setUpServer ] => %+v", err.Error())
+		sugarLogger.Infof("[ Error setUpServer ] => %+v\n", err)
 	}
 
 	srv := &http.Server{
