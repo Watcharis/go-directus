@@ -1,14 +1,14 @@
 # install project & run project
 
     1. clone project
-        * https://github.com/Watcharis/go-directus.git
+        *   https://github.com/Watcharis/go-directus.git
 
     2. install package go
-        * go mod download
-        * go mod tidy
+        *   go mod download
+        *   go mod tidy
 
     3. run project use command
-        * go run main.go
+        *   go run main.go
 
 # install directus
     docker-compose up -d
