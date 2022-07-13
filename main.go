@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -23,7 +24,7 @@ func GraceFullShutdownAndRunServer() {
 	var wg sync.WaitGroup
 
 	logger, _ := zap.NewProduction()
-	defer logger.Sync() // flushes buffer, if any
+	defer logger.Sync()
 	sugarLogger := logger.Sugar()
 
 	handler, err := setupServer(sugarLogger)
@@ -37,12 +38,12 @@ func GraceFullShutdownAndRunServer() {
 	}
 
 	go func(srv *http.Server) {
-		log.Printf("[ GO HTTP START SERVER ] %+v\n", srv.Addr)
+		sugarLogger.Info("[ GO start http server port] ", srv.Addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Printf("[ Error server close ] => %+v\n", err)
+			errServer := errors.New("error server close")
+			sugarLogger.With("error", errServer)
 			return
 		}
-
 	}(srv)
 
 	sigint := make(chan os.Signal, 1)
