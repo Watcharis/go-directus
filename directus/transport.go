@@ -3,11 +3,13 @@ package directus
 import (
 	"context"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 type WebhookTransports interface {
-	FetchDataFromDirectus(ctx context.Context) http.Handler
-	CallDirectus() http.Handler
+	FetchDataFromDirectus(ctx context.Context, logger *zap.SugaredLogger) http.Handler
+	CallDirectus(ctx context.Context, logger *zap.SugaredLogger) http.Handler
 }
 
 type Transports struct {
@@ -20,10 +22,10 @@ func NewTransports(whe WebhookEndpoint) *Transports {
 	}
 }
 
-func (w *Transports) FetchDataFromDirectus(ctx context.Context) http.Handler {
-	return w.whe.FetchDataFromDirectusEndpoint(ctx)
+func (w *Transports) FetchDataFromDirectus(ctx context.Context, logger *zap.SugaredLogger) http.Handler {
+	return w.whe.FetchDataFromDirectusEndpoint(ctx, logger)
 }
 
-func (w *Transports) CallDirectus(ctx context.Context) http.Handler {
-	return w.whe.CallDirectusEndpoint(ctx)
+func (w *Transports) CallDirectus(ctx context.Context, logger *zap.SugaredLogger) http.Handler {
+	return w.whe.CallDirectusEndpoint(ctx, logger)
 }

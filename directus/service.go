@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 type WebhookServices interface {
-	FetchDataFromDirectusService(ctx context.Context) (string, error)
-	CallDirectusService(ctx context.Context) (string, error)
+	FetchDataFromDirectusService(ctx context.Context, logger *zap.SugaredLogger) (string, error)
+	CallDirectusService(ctx context.Context, logger *zap.SugaredLogger) (string, error)
 }
 
 type Service struct{}
@@ -18,11 +20,11 @@ func NewService() *Service {
 	return &Service{}
 }
 
-func (s *Service) FetchDataFromDirectusService(ctx context.Context) (string, error) {
+func (s *Service) FetchDataFromDirectusService(ctx context.Context, logger *zap.SugaredLogger) (string, error) {
 	return "ok", nil
 }
 
-func (s *Service) CallDirectusService(ctx context.Context) (string, error) {
+func (s *Service) CallDirectusService(ctx context.Context, logger *zap.SugaredLogger) (string, error) {
 
 	url := "http://0.0.0.0:8055/items/consent_action_forms?fields=*,consent_id.*&filter[consent_id][status][_eq]=active&sort[]=-created_at"
 	// url := "https://app-stg.fillgoods.co/stable/crm/items/consent_action_forms?fields=*,consent_id.*&filter[consent_id][is_active][_eq]=true&filter[is_active][_eq]=true&sort[]=created_at"

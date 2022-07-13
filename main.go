@@ -12,6 +12,7 @@ import (
 	"watcharis/go-directus/directus"
 
 	"github.com/gorilla/mux"
+	"go.uber.org/zap"
 )
 
 const (
@@ -21,7 +22,11 @@ const (
 func GraceFullShutdownAndRunServer() {
 	var wg sync.WaitGroup
 
-	handler, err := setupServer()
+	logger, _ := zap.NewProduction()
+	defer logger.Sync() // flushes buffer, if any
+	sugarLogger := logger.Sugar()
+
+	handler, err := setupServer(sugarLogger)
 	if err != nil {
 		log.Printf("[ Error setUpServer ] => %+v", err.Error())
 	}
@@ -55,7 +60,7 @@ func GraceFullShutdownAndRunServer() {
 	wg.Wait()
 }
 
-func setupServer() (http.Handler, error) {
+func setupServer(sugarLogger *zap.SugaredLogger) (http.Handler, error) {
 
 	ctx := context.Background()
 	router := mux.NewRouter()
@@ -66,8 +71,8 @@ func setupServer() (http.Handler, error) {
 
 	//---- router -----
 	directusRouter := router.PathPrefix("/directus").Subrouter()
-	directusRouter.Handle("/fetch", directusTransport.CallDirectus(ctx)).Methods(http.MethodGet)
-	directusRouter.Handle("/test", directusTransport.FetchDataFromDirectus(ctx)).Methods(http.MethodGet)
+	directusRouter.Handle("/fetch", directusTransport.CallDirectus(ctx, sugarLogger)).Methods(http.MethodGet)
+	directusRouter.Handle("/test", directusTransport.FetchDataFromDirectus(ctx, sugarLogger)).Methods(http.MethodGet)
 
 	return router, nil
 }
